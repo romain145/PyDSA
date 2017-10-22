@@ -604,12 +604,15 @@ def Sweep():   # Read samples and store the data into the arrays
             
             while scope.ask(':TRIG:STAT?') != 'STOP':
                 sleep(0.1)
-            #sleep(0.1)
+                scope.write(":STOP")
+            sleep(0.1)
     # Grab the raw data from channel 1, which will take a few seconds for long buffer mode
 
-            scope.write(":STOP")
+            #scope.write(":STOP")
             scope.write(":WAV:POIN:MODE RAW")
-
+            scope.write(":WAV:SOUR CHAN1")
+            scope.write(":WAVeform:MODE RAW")
+			
             txt = "->Acquire"
             x = X0L + 275
             y = Y0T+GRH+32
@@ -617,10 +620,10 @@ def Sweep():   # Read samples and store the data into the arrays
             root.update()       # update screen 
 
 
-            signals= scope.ask(":WAV:DATA? CHAN1")  #do this first
+            signals= scope.ask(":WAV:DATA?")  #do this first
             data_size = len(signals)
             
-            SAMPLErate = scope.ask_for_values(':ACQ:SAMP?')[0] #do this second
+            SAMPLErate = float(scope.ask(':ACQuire:SRATe?')) #do this second
             #print 'Data size:', SAMPLEsize, "Sample rate:", SAMPLErate
 
 
